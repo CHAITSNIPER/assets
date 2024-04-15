@@ -7,6 +7,7 @@ function SongPlaying(){
     const [song,setSong] = useState('');
     const [liked,setLiked] = useState(false);
     const [genre,setGenre] = useState('');
+    const [responseData,setResponseData]=useState(null);
 
     const handleChange = (ev)=>{
         const name = ev.target.name;
@@ -33,11 +34,30 @@ function SongPlaying(){
             alert('Empty Fields Detected');
             return;
            }
-        else{
-            alert('form submitted, enjoy:)');
+        if(song.length <=0){
+            alert('empty fields');
+            return;
         }
+        try{
+            const response = async()=> await fetch('http://localhost:5002/api/data',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({key:'value'}),
+                
+            })
+            const data = async()=>await response.json();
+            setResponseData(data);
+            alert('Form submitted, Stay on page while your UID is being generated');
+       }
+       catch{
+        console.error('couldnt fetch data');
+        alert('form not submitted');
+       }
     }
     
+
      return(
         <>
         <h1>Enter song Details</h1>

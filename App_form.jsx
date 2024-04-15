@@ -4,7 +4,7 @@ import './App.css';
 const currentYear = 2024;
 
 
-function App() {
+function App({formData,onFormChange}) {
   const [input, setinput] = useState({})
   
   const [age,setAge] = useState(0);
@@ -13,6 +13,7 @@ function App() {
   const [userType,setUserType] = useState('');
   const [selectOption,setSelectOption]= useState('');
   const [UserID,GenerateUserID] = useState(0);
+  const [responseData,setResponseData]=useState(null);
   
   const handleSubmit = (ev)=>{
     ev.preventDefault();
@@ -31,16 +32,37 @@ function App() {
        return;
     }
     const number = Math.floor(Math.random()*(10000000000-100000000 + 1) + 10000000)
+   
+   
     GenerateUserID(number);
-     alert('Form submitted, Stay on page while your UID is being generated');
 
+console.log(UserID);
+setinput({...input, 'UserID': UserID});
+console.log(input);
+  try{
+      const response = async()=> await fetch('http://localhost:5002/api/data',{
+          method:'POST',
+          headers:{
+              'Content-Type':'application/json'
+          },
+          body: JSON.stringify({key:'value'})
+      });
+      const data =async()=> await response.json();
+      setResponseData(data);
+      alert('Form submitted, Stay on page while your UID is being generated');
   }
+  catch(error){
+      console.error('error fetching data:',error);
+      alert('failed to submit form');
+  }
+};
 
 
 
   const handleChange = (ev)=>{
     const name = ev.target.name;
     const value = ev.target.value;
+    onFormChange(name,value);
     setinput({...input,[name]:value});
 
     if(name==='DateOfBirth'){
@@ -124,7 +146,7 @@ function App() {
              <p>You selected: <nav className="what">{selectOption}</nav></p>
         <input type = "submit" />
         <br></br>
-        <div >Your generated UID : {UserID}</div>
+        <div name="UserID" value={UserID}>Your generated UID : {UserID}</div>
      </form>
      
     </>
