@@ -27,7 +27,7 @@ function SongPlaying(){
         }
     }
 
-    const handleSubmit = (ev)=>{
+    const handleSubmit = async(ev)=>{
         ev.preventDefault();
         const isEmptyField=Object.values(inputs).some(value=>value==='');
         if(isEmptyField){
@@ -38,16 +38,17 @@ function SongPlaying(){
             alert('empty fields');
             return;
         }
+        console.log(inputs);
         try{
-            const response = async()=> await fetch('http://localhost:5002/api/data',{
+            const response =  await fetch('http://localhost:5002/api/data',{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body: JSON.stringify({key:'value'}),
+                body: JSON.stringify(inputs),
                 
-            })
-            const data = async()=>await response.json();
+            });
+            const data = response.json();
             setResponseData(data);
             alert('Form submitted, Stay on page while your UID is being generated');
        }
