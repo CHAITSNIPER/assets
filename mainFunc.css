@@ -1,0 +1,12 @@
+.toggle{
+    position: absolute;
+    bottom : 19rem;
+    z-index: 5;
+    left : 13rem;
+    
+    
+}
+.toggle:hover{
+  color: red;
+  background-color: rgb(62, 185, 62);
+}
